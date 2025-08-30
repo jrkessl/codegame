@@ -3,8 +3,9 @@ import pygame
 pygame.init()
 
 # Load image and create window
-image = pygame.image.load("gray.png")
-window = pygame.display.set_mode(image.get_size())
+image = pygame.image.load("grass2.png") # load image 
+window = pygame.display.set_mode(image.get_size()) # create window the size of the image
+pygame.display.set_caption("Code Game (working title)") # set window title
 
 running = True
 while running:
