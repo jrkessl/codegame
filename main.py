@@ -9,10 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("soldier1.png")
         
         self.rect = self.image.get_rect() # Creates a Rect to store the position of the player
-        # self.rect.center = (10*32, 10*32) # Sets the starting position of the player
         self.rect.topleft = (10*32, 10*32) # Sets the starting position of the player
-
-        # print("player initialized.")
  
     def update(self):
         pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
@@ -37,11 +34,14 @@ class Player(pygame.sprite.Sprite):
         
 pygame.init()
 
-# Load background image and create window
+# Set game speed
+FPS = 60
+FramePerSec = pygame.time.Clock()
+
+# Prepare game window
 background = pygame.image.load("grass2.png") # load background image
 windowWidth = background.get_width() # capture dimensions of background image
 windowHeight = background.get_height()
-
 window = pygame.display.set_mode((windowWidth, windowHeight), HWSURFACE | DOUBLEBUF | RESIZABLE) # Creates game window with the size of the background image, and some options 
 pygame.display.set_caption("Code Game (working title)") # set window title
 
@@ -51,6 +51,8 @@ P1 = Player()
 # Creates a group to hold sprites of all players
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
+
+frames=0
 
 running = True
 while running:
@@ -78,6 +80,10 @@ while running:
 
     window.blit(renderSurface, (0, 0)) # render the scaled surface in the window
     pygame.display.update() # update the display
+    FramePerSec.tick(FPS)
+
+    print("frames = ", frames)
+    frames += 1
 
     
 
