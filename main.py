@@ -9,7 +9,7 @@ background = pygame.image.load("grass2.png") # load background image
 windowWidth = background.get_width() # capture dimensions of background image
 windowHeight = background.get_height()
 
-window = pygame.display.set_mode((windowWidth, windowHeight), HWSURFACE | DOUBLEBUF | RESIZABLE) # Creates game window with set size, and some options 
+window = pygame.display.set_mode((windowWidth, windowHeight), HWSURFACE | DOUBLEBUF | RESIZABLE) # Creates game window with the size of the background image, and some options 
 pygame.display.set_caption("Code Game (working title)") # set window title
 
 running = True
@@ -25,30 +25,10 @@ while running:
                 running = False
                 break
 
-    # Create a surfate and blit the background image onto it
-    renderSurface = Surface((windowWidth, windowHeight))
-    renderSurface.blit(background, (0, 0))
+    renderSurface = Surface((windowWidth, windowHeight)) # Create a surfate
+    renderSurface.blit(background, (0, 0)) # blit the background image onto it 
 
-    # Scale rendering to window size
-    windowWidth, windowHeight = window.get_size()
-    renderRatio = windowWidth / windowHeight
-    windowRatio = windowWidth / windowHeight
-    if windowRatio <= renderRatio:
-        rescaledSurfaceWidth = windowWidth
-        rescaledSurfaceHeight = int(windowWidth / renderRatio)
-        rescaledSurfaceX = 0
-        rescaledSurfaceY = (windowHeight - rescaledSurfaceHeight) // 2
-    else:
-        rescaledSurfaceWidth = int(windowHeight * renderRatio)
-        rescaledSurfaceHeight = windowHeight
-        rescaledSurfaceX = (windowWidth - rescaledSurfaceWidth) // 2
-        rescaledSurfaceY = 0
-
-    # Scale the rendering to the window/screen size
-    rescaledSurface = pygame.transform.scale(
-        renderSurface, (rescaledSurfaceWidth, rescaledSurfaceHeight)
-    )
-    window.blit(rescaledSurface, (rescaledSurfaceX, rescaledSurfaceY)) # render the scaled surface in the window
+    window.blit(renderSurface, (0, 0)) # render the scaled surface in the window
     pygame.display.update() # update the display
 
 pygame.quit()
