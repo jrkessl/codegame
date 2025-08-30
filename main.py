@@ -5,11 +5,12 @@ from pygame.surface import Surface
 pygame.init()
 
 # Load background image and create window
-window = pygame.display.set_mode((1024, 768), HWSURFACE | DOUBLEBUF | RESIZABLE) # Creates game window with set size, and some options 
-pygame.display.set_caption("Code Game (working title)") # set window title
 background = pygame.image.load("grass2.png") # load background image
-renderWidth = background.get_width() # capture dimensions of background image
-renderHeight = background.get_height()
+windowWidth = background.get_width() # capture dimensions of background image
+windowHeight = background.get_height()
+
+window = pygame.display.set_mode((windowWidth, windowHeight), HWSURFACE | DOUBLEBUF | RESIZABLE) # Creates game window with set size, and some options 
+pygame.display.set_caption("Code Game (working title)") # set window title
 
 running = True
 while running:
@@ -25,12 +26,12 @@ while running:
                 break
 
     # Create a surfate and blit the background image onto it
-    renderSurface = Surface((renderWidth, renderHeight))
+    renderSurface = Surface((windowWidth, windowHeight))
     renderSurface.blit(background, (0, 0))
 
     # Scale rendering to window size
     windowWidth, windowHeight = window.get_size()
-    renderRatio = renderWidth / renderHeight
+    renderRatio = windowWidth / windowHeight
     windowRatio = windowWidth / windowHeight
     if windowRatio <= renderRatio:
         rescaledSurfaceWidth = windowWidth
