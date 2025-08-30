@@ -9,7 +9,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("soldier1.png")
         
         self.rect = self.image.get_rect() # Creates a Rect to store the position of the player
-        self.rect.center = (10*32, 10*32) # Sets the starting position of the player
+        # self.rect.center = (10*32, 10*32) # Sets the starting position of the player
+        self.rect.topleft = (10*32, 10*32) # Sets the starting position of the player
+
+        # print("player initialized.")
  
     def update(self):
         pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
