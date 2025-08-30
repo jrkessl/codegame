@@ -4,7 +4,6 @@ pygame.init()
 
 # Load image and create window
 image = pygame.image.load("gray.png")
-# image = pygame.image.load("/home/juliano/gh/codegame/gray.png")
 window = pygame.display.set_mode(image.get_size())
 
 running = True
