@@ -7,27 +7,55 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("soldier1.png")
-        
         self.rect = self.image.get_rect() # Creates a Rect to store the position of the player
         self.rect.topleft = (10*32, 10*32) # Sets the starting position of the player
- 
-    def update(self):
-        pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
-        
-        if self.rect.left > 0:
-            if pressed_keys[K_LEFT]:
-                self.rect.move_ip(-5, 0)
-        if self.rect.right < windowWidth:        
-            if pressed_keys[K_RIGHT]:
-                self.rect.move_ip(5, 0)
 
-        if pressed_keys[K_UP]:
-            if self.rect.top > 0:
-                self.rect.move_ip(0, -5)
+        self.isMoving = False
+        self.isMovingLenght = 32 # 32 pixels is the size of one tile
+        self.isMovingCount = 0
+    
+    # This method handles when the key is pressed down continuously.
+    # def update(self):
+    #     pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
         
-        if pressed_keys[K_DOWN]: # se apertou pra baixo 
-            if self.rect.bottom < windowHeight: # se ainda não está na borda inferior 
-                self.rect.move_ip(0, 5) # move 5 pixels pra baixo 
+    #     if self.rect.left > 0:
+    #         if pressed_keys[K_LEFT]:
+    #             self.rect.move_ip(-5, 0)
+    #     if self.rect.right < windowWidth:        
+    #         if pressed_keys[K_RIGHT]:
+    #             self.rect.move_ip(5, 0)
+
+    #     if pressed_keys[K_UP]:
+    #         if self.rect.top > 0:
+    #             self.rect.move_ip(0, -5)
+        
+    #     if pressed_keys[K_DOWN]: # se apertou pra baixo 
+    #         if self.rect.bottom < windowHeight: # se ainda não está na borda inferior 
+    #             self.rect.move_ip(0, 5) # move 5 pixels pra baixo 
+    
+    # This method activates when the key happens to be pressed down just now. 
+    def update(self):
+        if (self.isMoving == False): # If player is still 
+            for event in pygame.event.get(): 
+                if event.type == pygame.KEYDOWN: # If a key is pressed down now 
+                    if event.key == pygame.K_LEFT: # If the key is the left arrow, we make it move left, 1 pixel at a time, for 32 frames
+                        self.isMoving = True
+                        self.rect.move_ip(-1, 0) # move 1 pixel to left
+                        self.isMovingCount = self.isMovingCount + 1
+                        print("Key left pressed! Moving...")
+        else: # If the player is already moving
+            if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved the full 32 pixels
+                self.rect.move_ip(-1, 0) # move 1 pixel to left
+                self.isMovingCount = self.isMovingCount + 1
+                print("moving...")
+            else: # If it has already moved the full 32 pixels
+                self.isMoving = False
+                self.isMovingCount = 0 
+                print("stopped!")
+
+
+
+        # pressed_keys = pygame.key.get_pressed()
  
     def draw(self, surface):
         surface.blit(self.image, self.rect)    
@@ -35,7 +63,7 @@ class Player(pygame.sprite.Sprite):
 pygame.init()
 
 # Set game speed
-FPS = 60
+FPS = 1
 FramePerSec = pygame.time.Clock()
 
 # Prepare game window
@@ -57,15 +85,15 @@ frames=0
 running = True
 while running:
 
-    # Handle input
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            break
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
-                break
+    # # Handle input
+    # for event in pygame.event.get():
+    #     if event.type == pygame.QUIT:
+    #         running = False
+    #         break
+    #     elif event.type == pygame.KEYDOWN:
+    #         if event.key == pygame.K_ESCAPE:
+    #             running = False
+    #             break
 
     renderSurface = Surface((windowWidth, windowHeight)) # Create a surfate
     renderSurface.blit(background, (0, 0)) # blit the background image onto it 
