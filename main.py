@@ -3,6 +3,8 @@ from pygame.constants import HWSURFACE, DOUBLEBUF, RESIZABLE
 from pygame.surface import Surface
 from pygame.locals import *
 
+running = True
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
@@ -35,10 +37,19 @@ class Player(pygame.sprite.Sprite):
     
     # This method activates when the key happens to be pressed down just now. 
     def update(self):
+        global running
         if (self.isMoving == False): # If player is still 
             for event in pygame.event.get(): 
-                if event.type == pygame.KEYDOWN: # If a key is pressed down now 
-                    if event.key == pygame.K_LEFT: # If the key is the left arrow, we make it move left, 1 pixel at a time, for 32 frames
+
+                if event.type == pygame.QUIT: # If the window is closed
+                    running = False
+                    break
+
+                elif event.type == pygame.KEYDOWN: # User pressed a key
+                    if event.key == pygame.K_ESCAPE: # It is the ESC key that has been pressed 
+                        running = False
+                        break
+                    elif event.key == pygame.K_LEFT: # If the key is the left arrow, we make it move left, 1 pixel at a time, for 32 frames
                         self.isMoving = True
                         self.rect.move_ip(-1, 0) # move 1 pixel to left
                         self.isMovingCount = self.isMovingCount + 1
@@ -52,10 +63,6 @@ class Player(pygame.sprite.Sprite):
                 self.isMoving = False
                 self.isMovingCount = 0 
                 print("stopped!")
-
-
-
-        # pressed_keys = pygame.key.get_pressed()
  
     def draw(self, surface):
         surface.blit(self.image, self.rect)    
@@ -63,7 +70,7 @@ class Player(pygame.sprite.Sprite):
 pygame.init()
 
 # Set game speed
-FPS = 1
+FPS = 60
 FramePerSec = pygame.time.Clock()
 
 # Prepare game window
@@ -82,7 +89,9 @@ all_sprites.add(P1)
 
 frames=0
 
-running = True
+
+
+
 while running:
 
     # # Handle input
