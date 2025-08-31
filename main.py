@@ -2,16 +2,28 @@ import pygame
 from pygame.constants import HWSURFACE, DOUBLEBUF, RESIZABLE
 from pygame.surface import Surface
 from pygame.locals import *
+import random
 
 running = True
-SQUARE_SIZE = 32
+SQUARE_SIZE = 32 # size of one tile (in pixels)
+PLAYER_SQUARE_SIZE = SQUARE_SIZE # size of the player (in pixels)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
-        self.image = pygame.image.load("soldier1.png")
-        self.rect = self.image.get_rect() # Creates a Rect to store the position of the player
-        self.rect.topleft = (10*SQUARE_SIZE, 10*SQUARE_SIZE) # Sets the starting position of the player
+        self.image = pygame.transform.scale(pygame.image.load("assets/exports/soldado1_resting1.png"), (PLAYER_SQUARE_SIZE, PLAYER_SQUARE_SIZE))
+
+        self.rest1 = pygame.transform.scale(pygame.image.load("assets/exports/soldado1_resting1.png"), (PLAYER_SQUARE_SIZE, PLAYER_SQUARE_SIZE)) # Load the sprites of the resting animation 
+        self.rest2 = pygame.transform.scale(pygame.image.load("assets/exports/soldado1_resting2.png"), (PLAYER_SQUARE_SIZE, PLAYER_SQUARE_SIZE))
+        self.rest3 = pygame.transform.scale(pygame.image.load("assets/exports/soldado1_resting3.png"), (PLAYER_SQUARE_SIZE, PLAYER_SQUARE_SIZE))
+        self.restingSprites = [self.rest1, self.rest2, self.rest3] # put all resting sprites in a list
+        self.restingSpriteCounter = 3 # Number of sprites in the resting animation
+        self.restingAnimationCounter = 0 # Counter to know when to update the resting animation 
+        self.restingCurrentSprite = 0 # Which sprite of the resting animation is currently being shown
+
+        self.moving1 = pygame.transform.scale(pygame.image.load("assets/exports/soldado1_running1.png"), (PLAYER_SQUARE_SIZE, PLAYER_SQUARE_SIZE)) # Load the sprites of the moving animation 
+
+        self.rect = pygame.Rect(10*SQUARE_SIZE, 10*SQUARE_SIZE, PLAYER_SQUARE_SIZE, PLAYER_SQUARE_SIZE) # Create a rect for the player, passing position x, y and size (width, height)
 
         self.isMovingLenght = SQUARE_SIZE # SQUARE_SIZE is the size of one tile (in pixels)
         self.isMovingCount = 0
@@ -100,7 +112,18 @@ class Player(pygame.sprite.Sprite):
                 print("stopped!")
  
     def draw(self, surface):
-        surface.blit(self.image, self.rect)    
+        if (self.movingDirection == ' '): # If the player is still
+            if (self.restingAnimationCounter == 0): # Time to pick the next resting sprite
+                self.restingCurrentSprite = random.randint(0, self.restingSpriteCounter-1) # calculate a random number between 0 and self.restingSpriteCounter-1 and put it in self.restingCurrentSprite
+                self.restingAnimationCounter = random.randint(2, 4)*FPS # calculate a random number of seconds between 2 and 4 (this is the timer to cycle the resting animation)
+            else:
+                self.restingAnimationCounter = self.restingAnimationCounter - 1
+            surface.blit(self.restingSprites[self.restingCurrentSprite], self.rect) # blit the players' image in the surface of the game    
+        else: # If the player is moving
+            surface.blit(self.moving1, self.rect) # blit the players' image in the surface of the game    
+
+        
+        # print("resting sprite = ", self.restingCurrentSprite, ", counter = ", self.restingAnimationCounter)
         
 pygame.init()
 
@@ -134,17 +157,19 @@ while running:
         running = False
         break
 
-    # players play the game 
-    all_sprites.update() # Calls update method of all players
+    # All players play the game 
+    for item in all_sprites:
+        item.update()
 
-    # players get drawn in the screen     
-    all_sprites.draw(renderSurface) # Calls draw method of all players
+    # Calls draw method of all players
+    for item in all_sprites:
+        item.draw(renderSurface)   
 
     window.blit(renderSurface, (0, 0)) # render the scaled surface in the window
     pygame.display.update() # update the display
     FramePerSec.tick(FPS)
 
-    print("frames = ", frames)
+    # print("frames = ", frames)
     frames += 1
 
     # Clear the background where the players were, so we don't have to re-draw the whole screen at every frame
