@@ -13,18 +13,19 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect() # Creates a Rect to store the position of the player
         self.rect.topleft = (10*SQUARE_SIZE, 10*SQUARE_SIZE) # Sets the starting position of the player
 
-        self.isMoving = False
         self.isMovingLenght = SQUARE_SIZE # SQUARE_SIZE is the size of one tile (in pixels)
         self.isMovingCount = 0
+        self.movingDirection = ' ' # direction the player is facing. Can be: N (north), W (west), etc. Also NE (northeast), NW, SE, SW. Or space (" ") for being still. 
+        self.facingDirection = 'E' # default to looking right (east)
     
     # This method activates when the key happens to be pressed down just now. 
     def update(self):
-        if (self.isMoving == False): # If player is still 
+        if (self.movingDirection == ' '): # If player is still 
             keys = pygame.key.get_pressed() # Get the keys that are pressed down now 
             if keys[pygame.K_LEFT]: # If the left arrow is being held down
                 # Is the player already moving?
-                if (self.isMoving == False): # If the player is still
-                    self.isMoving = True
+                if (self.movingDirection == ' '): # If the player is still
+                    self.movingDirection = 'W' # Set the moving direction to left (west)
                     self.rect.move_ip(-1, 0) # move 1 pixel to left
                     self.isMovingCount = self.isMovingCount + 1
                 else: # If the player is already moving
@@ -32,15 +33,69 @@ class Player(pygame.sprite.Sprite):
                         self.rect.move_ip(-1, 0) # move 1 pixel to left
                         self.isMovingCount = self.isMovingCount + 1
                     else: # If it has already moved a full square
-                        self.isMoving = False
+                        self.movingDirection = ' '
                         self.isMovingCount = 0  
+            elif keys[pygame.K_RIGHT]: # If the right arrow is being held down
+                # Is the player already moving?
+                if (self.movingDirection == ' '): # If the player is still
+                    self.movingDirection = 'E' # Set the moving direction to right (east)
+                    self.rect.move_ip(1, 0) # move 1 pixel to right
+                    self.isMovingCount = self.isMovingCount + 1
+                else: # If the player is already moving
+                    if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved a full square
+                        self.rect.move_ip(1, 0) # move 1 pixel to right
+                        self.isMovingCount = self.isMovingCount + 1
+                    else: # If it has already moved a full square
+                        self.movingDirection = ' '
+                        self.isMovingCount = 0  
+            elif keys[pygame.K_UP]: # If the up arrow is being held down
+                # Is the player already moving?
+                if (self.movingDirection == ' '): # If the player is still
+                    self.movingDirection = 'N' # Set the moving direction to up (north)
+                    self.rect.move_ip(0, -1) # move 1 pixel up
+                    self.isMovingCount = self.isMovingCount + 1
+                else: # If the player is already moving
+                    if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved a full square
+                        self.rect.move_ip(0, -1) # move 1 pixel up
+                        self.isMovingCount = self.isMovingCount + 1
+                    else: # If it has already moved a full square
+                        self.movingDirection = ' '
+                        self.isMovingCount = 0  
+            elif keys[pygame.K_DOWN]: # If the down arrow is being held down
+                # Is the player already moving?
+                if (self.movingDirection == ' '): # If the player is still
+                    self.movingDirection = 'S' # Set the moving direction to down (south)
+                    self.rect.move_ip(0, 1) # move 1 pixel down
+                    self.isMovingCount = self.isMovingCount + 1
+                else: # If the player is already moving
+                    if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved a full square
+                        self.rect.move_ip(0, 1) # move 1 pixel down
+                        self.isMovingCount = self.isMovingCount + 1
+                    else: # If it has already moved a full square
+                        self.movingDirection = ' '
+                        self.isMovingCount = 0
         else: # If the player is already moving
             if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved a full square
-                self.rect.move_ip(-1, 0) # move 1 pixel to left
+                if (self.movingDirection == 'W'):
+                    self.rect.move_ip(-1, 0) # move 1 pixel to left
+                elif (self.movingDirection == 'E'):
+                    self.rect.move_ip(1, 0) # move 1 pixel to right
+                elif (self.movingDirection == 'N'):
+                    self.rect.move_ip(0, -1) # move 1 pixel up
+                elif (self.movingDirection == 'S'):
+                    self.rect.move_ip(0, 1) # move 1 pixel down
+                elif (self.movingDirection == 'NW'):
+                    self.rect.move_ip(-1, -1) # move 1 pixel to left and 1 pixel up
+                elif (self.movingDirection == 'NE'):
+                    self.rect.move_ip(1, -1) # move 1 pixel to right and 1 pixel up
+                elif (self.movingDirection == 'SW'):
+                    self.rect.move_ip(-1, 1) # move 1 pixel to left and 1 pixel down
+                elif (self.movingDirection == 'SE'):
+                    self.rect.move_ip(1, 1) # move 1 pixel to right and 1 pixel down
                 self.isMovingCount = self.isMovingCount + 1
                 print("moving...")
             else: # If it has already moved a full square
-                self.isMoving = False
+                self.movingDirection = ' '
                 self.isMovingCount = 0 
                 print("stopped!")
  
