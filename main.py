@@ -43,12 +43,10 @@ class Player(pygame.sprite.Sprite):
 
                 if event.type == pygame.QUIT: # If the window is closed
                     running = False
-                    break
 
                 elif event.type == pygame.KEYDOWN: # User pressed a key
                     if event.key == pygame.K_ESCAPE: # It is the ESC key that has been pressed 
                         running = False
-                        break
                     elif event.key == pygame.K_LEFT: # If the key is the left arrow, we make it move left, 1 pixel at a time, for 32 frames
                         self.isMoving = True
                         self.rect.move_ip(-1, 0) # move 1 pixel to left
@@ -94,15 +92,9 @@ frames=0
 
 while running:
 
-    # # Handle input
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         running = False
-    #         break
-    #     elif event.type == pygame.KEYDOWN:
-    #         if event.key == pygame.K_ESCAPE:
-    #             running = False
-    #             break
+    if pygame.event.peek(pygame.QUIT): # User pressed the window close button
+        running = False
+        break
 
     renderSurface = Surface((windowWidth, windowHeight)) # Create a surfate
     renderSurface.blit(background, (0, 0)) # blit the background image onto it 
