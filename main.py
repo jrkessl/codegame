@@ -16,42 +16,23 @@ class Player(pygame.sprite.Sprite):
         self.isMovingLenght = 32 # 32 pixels is the size of one tile
         self.isMovingCount = 0
     
-    # This method handles when the key is pressed down continuously.
-    # def update(self):
-    #     pressed_keys = pygame.key.get_pressed() # pega a tecla pressionada 
-        
-    #     if self.rect.left > 0:
-    #         if pressed_keys[K_LEFT]:
-    #             self.rect.move_ip(-5, 0)
-    #     if self.rect.right < windowWidth:        
-    #         if pressed_keys[K_RIGHT]:
-    #             self.rect.move_ip(5, 0)
-
-    #     if pressed_keys[K_UP]:
-    #         if self.rect.top > 0:
-    #             self.rect.move_ip(0, -5)
-        
-    #     if pressed_keys[K_DOWN]: # se apertou pra baixo 
-    #         if self.rect.bottom < windowHeight: # se ainda não está na borda inferior 
-    #             self.rect.move_ip(0, 5) # move 5 pixels pra baixo 
-    
     # This method activates when the key happens to be pressed down just now. 
     def update(self):
-        global running
         if (self.isMoving == False): # If player is still 
-            for event in pygame.event.get(): 
-
-                if event.type == pygame.QUIT: # If the window is closed
-                    running = False
-
-                elif event.type == pygame.KEYDOWN: # User pressed a key
-                    if event.key == pygame.K_ESCAPE: # It is the ESC key that has been pressed 
-                        running = False
-                    elif event.key == pygame.K_LEFT: # If the key is the left arrow, we make it move left, 1 pixel at a time, for 32 frames
-                        self.isMoving = True
+            keys = pygame.key.get_pressed() # Get the keys that are pressed down now 
+            if keys[pygame.K_LEFT]: # If the left arrow is being held down
+                # Is the player already moving?
+                if (self.isMoving == False): # If the player is still
+                    self.isMoving = True
+                    self.rect.move_ip(-1, 0) # move 1 pixel to left
+                    self.isMovingCount = self.isMovingCount + 1
+                else: # If the player is already moving
+                    if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved the full 32 pixels
                         self.rect.move_ip(-1, 0) # move 1 pixel to left
                         self.isMovingCount = self.isMovingCount + 1
-                        print("Key left pressed! Moving...")
+                    else: # If it has already moved the full 32 pixels
+                        self.isMoving = False
+                        self.isMovingCount = 0  
         else: # If the player is already moving
             if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved the full 32 pixels
                 self.rect.move_ip(-1, 0) # move 1 pixel to left
