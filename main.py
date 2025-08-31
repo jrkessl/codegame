@@ -67,27 +67,23 @@ P1 = Player()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
 
-frames=0
+frames=0 # Frame counter, for debugging 
 
-
-
+renderSurface = Surface((windowWidth, windowHeight)) # Create a surfate
+renderSurface.blit(background, (0, 0)) # blit the static background image onto it 
 
 while running:
 
+    # Check if we are closing 
     if pygame.event.peek(pygame.QUIT): # User pressed the window close button
         running = False
         break
 
-    renderSurface = Surface((windowWidth, windowHeight)) # Create a surfate
-    renderSurface.blit(background, (0, 0)) # blit the background image onto it 
-
-    # Calls draw method of all players
-    # for entity in all_sprites:
-    #     entity.draw(renderSurface)
-    
-    all_sprites.draw(renderSurface) # Calls draw method of all players
+    # players play the game 
     all_sprites.update() # Calls update method of all players
 
+    # players get drawn in the screen     
+    all_sprites.draw(renderSurface) # Calls draw method of all players
 
     window.blit(renderSurface, (0, 0)) # render the scaled surface in the window
     pygame.display.update() # update the display
@@ -96,7 +92,9 @@ while running:
     print("frames = ", frames)
     frames += 1
 
-    
+    # Clear the background where the players were, so we don't have to re-draw the whole screen at every frame
+    for entity in all_sprites:
+        renderSurface.blit(background, entity.rect.copy(), entity.rect.copy()) # redraw the background where the player was
 
 pygame.quit()
 
