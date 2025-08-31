@@ -4,16 +4,17 @@ from pygame.surface import Surface
 from pygame.locals import *
 
 running = True
+SQUARE_SIZE = 32
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("soldier1.png")
         self.rect = self.image.get_rect() # Creates a Rect to store the position of the player
-        self.rect.topleft = (10*32, 10*32) # Sets the starting position of the player
+        self.rect.topleft = (10*SQUARE_SIZE, 10*SQUARE_SIZE) # Sets the starting position of the player
 
         self.isMoving = False
-        self.isMovingLenght = 32 # 32 pixels is the size of one tile
+        self.isMovingLenght = SQUARE_SIZE # SQUARE_SIZE is the size of one tile (in pixels)
         self.isMovingCount = 0
     
     # This method activates when the key happens to be pressed down just now. 
@@ -27,18 +28,18 @@ class Player(pygame.sprite.Sprite):
                     self.rect.move_ip(-1, 0) # move 1 pixel to left
                     self.isMovingCount = self.isMovingCount + 1
                 else: # If the player is already moving
-                    if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved the full 32 pixels
+                    if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved a full square
                         self.rect.move_ip(-1, 0) # move 1 pixel to left
                         self.isMovingCount = self.isMovingCount + 1
-                    else: # If it has already moved the full 32 pixels
+                    else: # If it has already moved a full square
                         self.isMoving = False
                         self.isMovingCount = 0  
         else: # If the player is already moving
-            if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved the full 32 pixels
+            if (self.isMovingCount < self.isMovingLenght): # If it has not yet moved a full square
                 self.rect.move_ip(-1, 0) # move 1 pixel to left
                 self.isMovingCount = self.isMovingCount + 1
                 print("moving...")
-            else: # If it has already moved the full 32 pixels
+            else: # If it has already moved a full square
                 self.isMoving = False
                 self.isMovingCount = 0 
                 print("stopped!")
